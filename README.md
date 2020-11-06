@@ -1,4 +1,6 @@
-# pgkron - an RDS compatible replacement for pg_cron
+# pgkron - an RDS compatible alternative to pg_cron
+
+RDS does not support pg_cron :(
 
 Specify jobs as SQL to run with an interval (i.e. schedule the next run for a specific interval after the current job execution finishes).
 
