@@ -12,6 +12,6 @@ It is perfectly safe to have multiple callers calling `CALL pgkron.run();` - non
 
 See [test.sql](./test.sql) for setup and [test.sql](./test.sql) for example usage.
 
-Requires postgres 10+
+Requires postgres 11+
 
 <3
