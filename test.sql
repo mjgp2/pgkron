@@ -1,5 +1,6 @@
 CREATE TABLE pgkron.test( id serial primary key, value text not null );
 
+insert into pgkron.job(name, sql, run_at, interval, active) VALUES ( 'INACTIVE', 'INSERT INTO pgkron.test (value) VALUES (''inactive'')', now(), '1 hour', false);
 insert into pgkron.job(name, sql, run_at, interval) VALUES ( 'OK', 'INSERT INTO pgkron.test (value) VALUES (''ok'')', now(), '1 hour');
 insert into pgkron.job(name, sql, run_at, interval) VALUES ( 'OK then FAIL', 'INSERT INTO pgkron.test (value) VALUES (''fail''); bad sql', now(), '1 hour');
 insert into pgkron.job(name, sql, run_at, interval) VALUES ( 'FAIL', 'bad sql', now(), '1 hour');
@@ -12,7 +13,7 @@ $$, now(), '1 hour');
 -- run any pending jobs
 CALL pgkron.run();
 
--- should have a row for each job
+-- should have a row for each active job
 select * from pgkron.job_log;
 
 -- have the single ok, and the two rows from double

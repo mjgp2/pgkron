@@ -1,5 +1,5 @@
 CREATE SCHEMA pgkron;
-CREATE TABLE pgkron.job( id serial primary key, name text not null unique, sql text not null, run_at timestamp with time zone not null, interval text not null);
+CREATE TABLE pgkron.job( id serial primary key, name text not null unique, sql text not null, run_at timestamp with time zone not null, interval text not null, active boolean not null default true);
 CREATE TABLE pgkron.job_log( id serial primary key, job_id int not null references pgkron.job(id), run_at timestamp with time zone not null, sql text not null, row_count int, error boolean not null );
 
 CREATE OR REPLACE PROCEDURE pgkron.run()
@@ -24,7 +24,7 @@ while jobs < max_jobs loop
   error := false;
 
   BEGIN
-    select id, sql, run_at, interval into job_id, job_sql, job_run_at, job_interval from pgkron.job where run_at < now() and not ( id = any(job_ids) ) order by run_at limit 1 for update skip locked;
+    select id, sql, run_at, interval into job_id, job_sql, job_run_at, job_interval from pgkron.job where active and run_at < now() and not ( id = any(job_ids) ) order by run_at limit 1 for update skip locked;
     if job_id is null then
       return;
     END IF;
