@@ -1,13 +1,13 @@
 CREATE TABLE pgkron.test( id serial primary key, value text not null );
 
-insert into pgkron.job(sql, run_at, interval) VALUES ( 'INSERT INTO pgkron.test (value) VALUES (''ok'')', now(), '1 hour');
-insert into pgkron.job(sql, run_at, interval) VALUES ( 'INSERT INTO pgkron.test (value) VALUES (''fail''); bad sql', now(), '1 hour');
-insert into pgkron.job(sql, run_at, interval) VALUES ( 'bad sql', now(), '1 hour');
+insert into pgkron.job(name, sql, run_at, interval) VALUES ( 'OK', 'INSERT INTO pgkron.test (value) VALUES (''ok'')', now(), '1 hour');
+insert into pgkron.job(name, sql, run_at, interval) VALUES ( 'OK then FAIL', 'INSERT INTO pgkron.test (value) VALUES (''fail''); bad sql', now(), '1 hour');
+insert into pgkron.job(name, sql, run_at, interval) VALUES ( 'FAIL', 'bad sql', now(), '1 hour');
 
-insert into pgkron.job(sql, run_at, interval) VALUES ($$
+insert into pgkron.job(name, sql, run_at, interval) VALUES ( 'DOUBLE', $$
 INSERT INTO pgkron.test (value) VALUES ('two-1');
 INSERT INTO pgkron.test (value) VALUES ('two-2');
-$$), now(), '1 hour');
+$$, now(), '1 hour');
 
 -- run any pending jobs
 CALL pgkron.run();
