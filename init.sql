@@ -40,7 +40,7 @@ while jobs < max_jobs loop
     END;
 
     INSERT INTO pgkron.job_log ( job_id, run_at, row_count, error, sql ) VALUES ( job_id, job_run_at, row_count, error, job_sql );
-    UPDATE pgkron.job SET run_at = now() + job_interval::interval where id = job_id;
+    UPDATE pgkron.job SET run_at = run_at + interval::interval * ceiling(extract( epoch from now() - run_at)/extract( epoch from interval::interval )) where id = job_id;
     COMMIT; 
   END; -- end job execution
   jobs := jobs + 1;
