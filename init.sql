@@ -52,7 +52,7 @@ END;
 $$
 LANGUAGE plpgsql;
 
-                                                                                                                     CREATE OR REPLACE FUNCTION pgkron.housekeep()
+CREATE OR REPLACE FUNCTION pgkron.housekeep()
 RETURNS void
 AS $$
 BEGIN
