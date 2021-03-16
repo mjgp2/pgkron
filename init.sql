@@ -51,3 +51,15 @@ RAISE DEBUG 'pgkron: run % jobs', jobs;
 END;
 $$
 LANGUAGE plpgsql;
+
+                                                                                                                     CREATE OR REPLACE FUNCTION pgkron.housekeep()
+RETURNS void
+AS $$
+BEGIN
+  DELETE FROM pgkron.job_log WHERE ts < now() - interval '7 days';
+END;
+$$
+LANGUAGE plpgsql SECURITY DEFINER;
+
+
+insert into pgkron.job(name, interval, sql, run_at) VALUES ('pg_kron housekeeping', '1 week', $$SELECT pgkron.housekeep();$$, '1970-01-01');
