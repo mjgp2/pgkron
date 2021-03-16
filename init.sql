@@ -1,6 +1,6 @@
 CREATE SCHEMA pgkron;
 CREATE TABLE pgkron.job( id serial primary key, name text not null unique, sql text not null, run_at timestamp with time zone not null, interval text not null, active boolean not null default true);
-CREATE TABLE pgkron.job_log( id serial primary key, job_id int not null references pgkron.job(id), run_at timestamp with time zone not null, sql text not null, row_count int, error boolean not null, ts timestamp with time zone default now());
+CREATE TABLE pgkron.job_log( id serial primary key, job_id int not null references pgkron.job(id), run_at timestamp with time zone not null, sql text not null, row_count int, error boolean not null, ts timestamp with time zone not null default now());
 
 CREATE OR REPLACE PROCEDURE pgkron.run()
 AS $$
